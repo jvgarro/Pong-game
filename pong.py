@@ -14,15 +14,15 @@ BLOCSIZE = 20 #Set the size of the grid block
 start = True
 
 def main():
-    global SCREEN, CLOCK, x_ball_pos, y_ball_pos, x_velocity, y_velocity, x_pong1, y_pong1, x_pong2, y_pong2
+    global SCREEN, CLOCK, x_ball_pos, y_ball_pos, x_velocity, y_velocity, x_pong1, y_pong1, x_pong2, y_pong2, score1, score2, my_font
     x_pong1 = 20
     y_pong1 = 180
     x_pong2 = 380
     y_pong2 = 180
     x_ball_pos = 200
     y_ball_pos = 200
-    x_velocity = 5
-    y_velocity = 1
+    x_velocity = 20
+    y_velocity = 2
     score1 = 0
     score2 = 0
     pygame.init()
@@ -36,8 +36,10 @@ def main():
         CLOCK.tick(60)
         SCREEN.fill(BLACK)
         objects()
-        text_surface = my_font.render(str(score1) + ' :SCORE: ' + str(score2), False, WHITE)
+        text_surface = my_font.render(str(score1) + ' :SCORE: ' + str(score2), False, 'White')
         SCREEN.blit(text_surface, (120, 0))
+
+        endGame()
         
         # Controllers
         keys = pygame.key.get_pressed()   
@@ -91,6 +93,26 @@ def objects():
     pygame.draw.rect(SCREEN, WHITE, (x_ball_pos, y_ball_pos, BLOCSIZE, BLOCSIZE))
     pygame.draw.rect(SCREEN, WHITE, (x_pong1, y_pong1, BLOCSIZE, BLOCSIZE*3))        
     pygame.draw.rect(SCREEN, WHITE, (x_pong2, y_pong2, BLOCSIZE, BLOCSIZE*3))
+
+def endGame():
+    if score1 == 100:
+        SCREEN.fill('Black')
+        winner_surface = my_font.render('Winner: Player 1' + ' SCORE:' + str(score1), False, 'White')
+        SCREEN.blit(winner_surface, (0, 0))
+        pygame.display.update()
+        pygame.time.wait(3000)
+    
+    if score2 == 100:
+        SCREEN.fill('Black')
+        winner_surface = my_font.render('Winner: Player 2' + ' SCORE:' + str(score2), False, 'White')
+        SCREEN.blit(winner_surface, (0, 0))
+        pygame.display.update()
+        pygame.time.wait(3000)
+        
+
+def checkScreenBoundaries():
+    pass
+    
             
 if __name__ == '__main__':
     main()
