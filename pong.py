@@ -23,8 +23,8 @@ class Game():
         self.y_pong2 = 180
         self.x_ball_pos = 200
         self.y_ball_pos = 200
-        self.x_velocity = 20
-        self.y_velocity = 2
+        self.x_velocity = 1
+        self.y_velocity = 0
         self.score1 = 0
         self.score2 = 0
 
@@ -79,7 +79,7 @@ class Game():
 
     def collisions(self):
         # Ball and pad 1  
-        if self.x_ball_pos-20 == self.x_pong1:    
+        if self.x_ball_pos == self.x_pong1:    
             if self.y_ball_pos < self.y_pong1+(20*3):    
                 if self.y_ball_pos+20 > self.y_pong1:
                     self.x_velocity *= -1          
@@ -111,13 +111,23 @@ class Game():
             self.SCREEN.blit(winner_surface, (0, 0))
             pygame.display.update()
             pygame.time.wait(1000)
+            self.score1 = 0
+            self.score2 = 0
+            self.x_ball_pos = 200
+            self.y_ball_pos = 200
         
         if self.score2 == 100:
+            
             self.SCREEN.fill('Black')
             winner_surface = self.my_font.render('Winner: Player 2' + ' SCORE:' + str(self.score2), False, 'White')
+            
             self.SCREEN.blit(winner_surface, (0, 0))
             pygame.display.update()
             pygame.time.wait(1000)
+            self.score1 = 0
+            self.score2 = 0
+            self.x_ball_pos = 200
+            self.y_ball_pos = 200
 
 
 game = Game()
