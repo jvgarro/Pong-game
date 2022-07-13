@@ -3,7 +3,6 @@ import sys
 from pygame.locals import *
 import random
 
-
 class Game():
     def __init__(self):
         pygame.init()
@@ -58,7 +57,6 @@ class Game():
                 if self.scores[1] == 10:
                     self.endGame(self.scores[1], "Player 2")
                     
-
                 self.controllers()
                 self.collisions()
                 self.checkScreenBoundaries()
@@ -75,9 +73,9 @@ class Game():
         pad1Rect = Rect(self.pad1[0], self.pad1[1], 10, self.BLOCSIZE*3)
         pad2Rect = Rect(self.pad2[0], self.pad2[1], 10, self.BLOCSIZE*3)
 
-        pygame.draw.rect(self.SCREEN, 'gold', ballRect)
-        pygame.draw.rect(self.SCREEN, 'mediumblue', pad1Rect)
-        pygame.draw.rect(self.SCREEN, 'orangered', pad2Rect)
+        pygame.draw.rect(self.SCREEN, 'mediumaquamarine', ballRect)
+        pygame.draw.rect(self.SCREEN, 'maroon3', pad1Rect)
+        pygame.draw.rect(self.SCREEN, 'maroon3', pad2Rect)
 
     def controllers(self):
         keys = pygame.key.get_pressed()
@@ -132,6 +130,5 @@ class Game():
         self.scores[1] = 0
         self.ball[0] = 200
         self.ball[1] = 200
-
 
 game = Game()
