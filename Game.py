@@ -17,6 +17,7 @@ class Game():
         # Scores for player 1 and 2
         self.scores = [0, 0]
         self.main()
+        # Testing
 
     def main(self):
         while True:
