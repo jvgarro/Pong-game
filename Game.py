@@ -4,6 +4,8 @@ import sys
 from pygame.locals import *
 import random
 
+from regex import F
+
 class Game():
     def __init__(self):
         pygame.init()
@@ -105,13 +107,11 @@ class Game():
         self.SCREEN.blit(winner_surface, (0, 0))
         pygame.display.update()
         pygame.time.wait(2000)
-        self.velocity = [10, 1]
         self.scores[0] = 0
         self.scores[1] = 0
-        self.ball[0] = 200
-        self.ball[1] = 200
+        self.startScreen()
     
-    # Initialize the game
+    # Initialize the game main variables
     def startScreen(self):
         self.start = False
         self.pad1 = [0, 180]
@@ -119,6 +119,5 @@ class Game():
         self.ball = [200, 200]
         self.velocity = [10, 1]
         self.begin_text = 'Press SPACE to start'
-        print(self.velocity[0])
 
 game = Game()
