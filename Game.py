@@ -1,10 +1,7 @@
-from traceback import print_tb
 import pygame
 import sys
 from pygame.locals import *
 import random
-
-from regex import F
 
 class Game():
     def __init__(self):
