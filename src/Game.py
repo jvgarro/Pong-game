@@ -58,7 +58,10 @@ class Game():
         pygame.draw.rect(self.SCREEN, 'maroon3', pad1Rect)
         pygame.draw.rect(self.SCREEN, 'maroon3', pad2Rect)
 
-        score_surface = self.my_font.render(str(self.scores[0]) + ' :SCORE: ' + str(self.scores[1]), False, 'White')
+        score_surface = self.my_font.render(str(self.scores[0]) +
+                     ' :SCORE: ' +
+                      str(self.scores[1]), False, 'White')
+                      
         self.SCREEN.blit(score_surface, (120, 0))
             
         begin_surface = self.my_font.render(str(self.begin_text), False, 'White')
