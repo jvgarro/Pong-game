@@ -33,6 +33,7 @@ class Game():
             self.SCREEN.fill('gray20')
             self.objects()
             if self.start == True:
+                # If the ball is out of the screen, end the game
                 if self.scores[0] == 10:
                     self.endGame(self.scores[0], "Player 1")
                 if self.scores[1] == 10:
@@ -101,6 +102,8 @@ class Game():
             self.velocity[0] *= -1
             self.velocity[1] *= -1
 
+    # This function is called when one of the players scores 10.
+    # It receives a string with the name of the player who scored and the score.
     def endGame(self, score, player):
         self.SCREEN.fill('gray20')
         winner_surface = self.my_font.render(
@@ -112,7 +115,7 @@ class Game():
         self.scores[1] = 0
         self.startScreen()
     
-    # Initialize the game main variables
+    # Initialize the game main variables for easy restart.
     def startScreen(self):
         self.start = False
         self.pad1 = [0, 180]
