@@ -3,6 +3,7 @@ import sys
 from pygame.locals import *
 import random
 
+
 class Game():
     def __init__(self):
         pygame.init()
@@ -13,7 +14,8 @@ class Game():
         self.WINDOW_WIDTH = 420
         self.BLOCSIZE = 20  # Set the size of the grid block
         self.CLOCK = pygame.time.Clock()
-        self.SCREEN = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
+        self.SCREEN = pygame.display.set_mode(
+            (self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         # Scores for player 1 and 2
         self.scores = [0, 0]
         self.main()
@@ -31,16 +33,16 @@ class Game():
                         self.begin_text = ' '
             self.CLOCK.tick(60)
             self.SCREEN.fill('gray20')
-            self.objects()
+            self.drawObjects()
             if self.start == True:
                 # If the ball is out of the screen, end the game
                 if self.scores[0] == 10:
                     self.endGame(self.scores[0], "Player 1")
                 if self.scores[1] == 10:
                     self.endGame(self.scores[1], "Player 2")
-                    
-                self.controllers()
-                self.collisions()
+
+                self.defineKeyBindings()
+                self.checkCollisions()
                 self.checkScreenBoundaries()
 
                 self.ball[0] += self.velocity[0]
@@ -48,7 +50,7 @@ class Game():
 
             pygame.display.update()
 
-    def objects(self):
+    def drawObjects(self):
         global ballRect, pad1Rect, pad2Rect
         ballRect = Rect(self.ball[0], self.ball[1],
                         self.BLOCSIZE, self.BLOCSIZE)
@@ -60,15 +62,16 @@ class Game():
         pygame.draw.rect(self.SCREEN, 'maroon3', pad2Rect)
 
         score_surface = self.my_font.render(str(self.scores[0]) +
-                     ' :SCORE: ' +
-                      str(self.scores[1]), False, 'White')
-                      
-        self.SCREEN.blit(score_surface, (120, 0))
-            
-        begin_surface = self.my_font.render(str(self.begin_text), False, 'White')
-        self.SCREEN.blit(begin_surface, (60, 120)) 
+                                            ' :SCORE: ' +
+                                            str(self.scores[1]), False, 'White')
 
-    def controllers(self):
+        self.SCREEN.blit(score_surface, (120, 0))
+
+        begin_surface = self.my_font.render(
+            str(self.begin_text), False, 'White')
+        self.SCREEN.blit(begin_surface, (60, 120))
+
+    def defineKeyBindings(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w] and self.pad1[1] > 0:
             self.pad1[1] -= 5
@@ -79,7 +82,7 @@ class Game():
         if keys[pygame.K_DOWN] and self.pad2[1] < self.WINDOW_HEIGHT - self.BLOCSIZE*3:
             self.pad2[1] += 5
 
-    def collisions(self):
+    def checkCollisions(self):
         # Ball and pad 1 in X
         if ballRect.colliderect(pad1Rect):
             self.velocity[0] *= -1
@@ -96,14 +99,14 @@ class Game():
 
         if self.ball[0]+20 > self.WINDOW_WIDTH+200:
             self.startScreen()
-            self.scores[0] += 1  
+            self.scores[0] += 1
 
         if self.ball[1] < 0 or self.ball[1]+20 > self.WINDOW_HEIGHT:
             self.velocity[0] *= -1
             self.velocity[1] *= -1
 
     # This function is called when one of the players scores 10.
-    # It receives a string with the name of the player who scored and the score.
+    # It receives a string with the name of the player and the score.
     def endGame(self, score, player):
         self.SCREEN.fill('gray20')
         winner_surface = self.my_font.render(
@@ -114,7 +117,7 @@ class Game():
         self.scores[0] = 0
         self.scores[1] = 0
         self.startScreen()
-    
+
     # Initialize the game main variables for easy restart.
     def startScreen(self):
         self.start = False
