@@ -13,9 +13,9 @@ class GameObject():
         self.color = color
 
     def draw(self, screen):
-        ballRect = Rect(self.x_pos, self.y_pos, self.width, self.height)
-        objectRect = pygame.draw.rect(screen, self.color, ballRect, 0, 10, 10, 10)
-        return objectRect
+        objectRect = Rect(self.x_pos, self.y_pos, self.width, self.height)
+        drawnRect = pygame.draw.rect(screen, self.color, objectRect, 0, 10, 10, 10)
+        return drawnRect
         
     # Get X and Y position
     def getX(self):
@@ -86,12 +86,12 @@ class Game():
             
     def checkScreenBoundaries(self):
         if self.ball.getX() < -200:
-            self.setDefaultValues()
             self.scores[1] += 1
+            self.setDefaultValues()
 
         if self.ball.getX()+20 > self.WINDOW_WIDTH+200:
-            self.setDefaultValues()
             self.scores[0] += 1
+            self.setDefaultValues()
 
         if self.ball.getY() < 0 or self.ball.getY()+20 > self.WINDOW_HEIGHT:
             self.velocity[0] *= -1
@@ -99,8 +99,10 @@ class Game():
     
     def endGame(self, score, player):
         self.SCREEN.fill('gray20')
-        winner_surface = self.my_font.render('Winner: ' + player + ' SCORE:' + str(score), False, 'White')
-        self.SCREEN.blit(winner_surface, (0, 0))
+        winner_surface = self.my_font.render('Winner: ' + player, False, 'White')
+        score_surface = self.my_font.render('SCORE:' + str(score), False, 'White')
+        self.SCREEN.blit(winner_surface, (50, 20))
+        self.SCREEN.blit(score_surface, (150, 150))
         pygame.display.update()
         pygame.time.wait(2000)
         self.scores[0] = 0
@@ -138,9 +140,9 @@ class Game():
             if self.start == True:
                 self.defineKeyBindings()
                 # Check if one of the players has won
-                if self.scores[0] == 10:
+                if self.scores[0] == 1:
                     self.endGame(self.scores[0], "Player 1")
-                if self.scores[1] == 10:
+                if self.scores[1] == 1:
                     self.endGame(self.scores[1], "Player 2")
                 
                 self.checkCollisions(ballRect, pad1Rect)
