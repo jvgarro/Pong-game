@@ -1,9 +1,9 @@
+from turtle import window_width
 import pygame
 import sys
 from pygame.locals import *
 import random
 from GameObject import GameObject
-
 
 class Game():
     def __init__(self):
@@ -11,8 +11,8 @@ class Game():
         pygame.font.init()
         pygame.display.set_caption('Pong')
         self.my_font = pygame.font.Font('Font/Pixeltype.ttf', 50)
-        self.WINDOW_HEIGHT = 420
-        self.WINDOW_WIDTH = 420
+        self.WINDOW_WIDTH = 720
+        self.WINDOW_HEIGHT = 480
         self.CLOCK = pygame.time.Clock()
         self.SCREEN = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         # Scores for player 1 and 2
@@ -22,8 +22,8 @@ class Game():
         # self.velocity = [10, 1]
         # self.begin_text = 'Press SPACE to start'
         self.ball = GameObject(300, 200, 20, 20, 'pink')
-        self.pad1 = GameObject(0, 200, 10, 60, 'maroon3')
-        self.pad2 = GameObject(410, 200, 10, 60, 'maroon3')
+        self.pad1 = GameObject(40, 200, 10, 90, 'maroon3')
+        self.pad2 = GameObject(self.WINDOW_WIDTH-40, 200, 10, 90, 'maroon3')
         self.setDefaultValues()
         self.main()
     
@@ -39,9 +39,9 @@ class Game():
     def drawObjects(self):
         global ballRect, pad1Rect, pad2Rect
         score_surface = self.my_font.render(str(self.scores[0]) +' :SCORE: ' + str(self.scores[1]), False, 'White')
-        self.SCREEN.blit(score_surface, (120, 0))
+        self.SCREEN.blit(score_surface, ((self.WINDOW_WIDTH/2)-90, 0))
         begin_surface = self.my_font.render(str(self.begin_text), False, 'White')
-        self.SCREEN.blit(begin_surface, (60, 120))
+        self.SCREEN.blit(begin_surface, ((self.WINDOW_WIDTH/2)-90, self.WINDOW_HEIGHT/2))
         ballRect = self.ball.draw(self.SCREEN)
         pad1Rect = self.pad1.draw(self.SCREEN)
         pad2Rect = self.pad2.draw(self.SCREEN)
@@ -50,17 +50,25 @@ class Game():
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w] and self.pad1.getY() > 0:
             self.pad1.setY(self.pad1.getY() - 5)
-        if keys[pygame.K_s] and self.pad1.getY() < self.WINDOW_HEIGHT - 60:
+        if keys[pygame.K_s] and self.pad1.getY() < self.WINDOW_HEIGHT - 90:
             self.pad1.setY(self.pad1.getY() + 5)
         if keys[pygame.K_UP] and self.pad2.getY() > 0:
             self.pad2.setY(self.pad2.getY() - 5)
-        if keys[pygame.K_DOWN] and self.pad2.getY() < self.WINDOW_HEIGHT - 60:
+        if keys[pygame.K_DOWN] and self.pad2.getY() < self.WINDOW_HEIGHT - 90:
             self.pad2.setY(self.pad2.getY() + 5)
     
     def checkCollisions(self, ball, pad):
         if ball.colliderect(pad):
             self.velocity[0] *= -1
-            self.velocity[1] = random.choice([-1, 0.5, 1, 1.5,2])
+            # self.velocity[1] = random.choice([-1, 0.5, 1, 1.5,2])
+            # -1 arriba, 1 abajo
+            if ball.y in range(pad.y, pad.y+30):
+                self.velocity[1] = random.choice([-1, -1, -1, -0.5, 0])
+            elif ball.y in range (pad.y+31, pad.y+60):
+                self.velocity[1] = random.choice([0, 0, 0, -0.5, -1])
+            elif ball.y in range(pad.y+61, pad.y+90):
+                self.velocity[1] = random.choice([1, 1, 1, 0, 0])
+                
             
     def checkScreenBoundaries(self):
         if self.ball.getX() < -200:
@@ -91,11 +99,11 @@ class Game():
         self.SCREEN.fill('gray20')
         
         start_surface = self.my_font.render(str('Start'), False, 'pink')
-        self.SCREEN.blit(start_surface, (150, 150))
+        self.SCREEN.blit(start_surface, ((self.WINDOW_WIDTH/2)-90, 120))
         settings_surface = self.my_font.render(str('Settings'), False, 'White')
-        self.SCREEN.blit(settings_surface, (150, 200))
+        self.SCREEN.blit(settings_surface, ((self.WINDOW_WIDTH/2)-90, 220))
         quit_surface = self.my_font.render(str('Quit'), False, 'White')
-        self.SCREEN.blit(quit_surface, (150, 250)) 
+        self.SCREEN.blit(quit_surface, ((self.WINDOW_WIDTH/2)-90, 320))
 
     # Main game loop
     def main(self):
@@ -127,6 +135,7 @@ class Game():
                 self.checkCollisions(ballRect, pad2Rect)
                 self.checkScreenBoundaries()
 
+                # Move the ball
                 self.ball.setX(self.ball.getX() + self.velocity[0])
                 self.ball.setY(self.ball.getY() + self.velocity[1])
                 
