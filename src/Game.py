@@ -1,37 +1,15 @@
-from turtle import Screen
 import pygame
 import sys
 from pygame.locals import *
 import random
+from GameObject import GameObject
 
-class GameObject():
-    def __init__(self, x_pos, y_pos, width, height, color):
-        self.x_pos = x_pos
-        self.y_pos = y_pos
-        self.width = width
-        self.height = height
-        self.color = color
 
-    def draw(self, screen):
-        objectRect = Rect(self.x_pos, self.y_pos, self.width, self.height)
-        drawnRect = pygame.draw.rect(screen, self.color, objectRect, 0, 10, 10, 10)
-        return drawnRect
-        
-    # Get X and Y position
-    def getX(self):
-        return self.x_pos
-    def getY(self):
-        return self.y_pos
-    
-    # Set X and Y position
-    def setX(self, x):
-        self.x_pos = x
-    def setY(self, y):
-        self.y_pos = y
 class Game():
     def __init__(self):
         pygame.init()
         pygame.font.init()
+        pygame.display.set_caption('Pong')
         self.my_font = pygame.font.Font('Font/Pixeltype.ttf', 50)
         self.WINDOW_HEIGHT = 420
         self.WINDOW_WIDTH = 420
@@ -39,7 +17,7 @@ class Game():
         self.SCREEN = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
         # Scores for player 1 and 2
         self.scores = [0, 0]
-        self.main_menu = True
+        self.main_menu_active = True
         # self.start = False
         # self.velocity = [10, 1]
         # self.begin_text = 'Press SPACE to start'
@@ -52,7 +30,7 @@ class Game():
     def setDefaultValues(self):
         self.ball.setX(200)
         self.ball.setY(200)
-        self.start = False
+        self.game_started = False
         self.velocity = [10, 1]
         self.begin_text = 'Press SPACE to start'
         self.pad1.setY(200)
@@ -82,7 +60,7 @@ class Game():
     def checkCollisions(self, ball, pad):
         if ball.colliderect(pad):
             self.velocity[0] *= -1
-            self.velocity[1] = random.choice([-1, 1])
+            self.velocity[1] = random.choice([-1, 0.5, 1, 1.5,2])
             
     def checkScreenBoundaries(self):
         if self.ball.getX() < -200:
@@ -131,18 +109,18 @@ class Game():
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        self.main_menu = False
-                        self.start = True
+                        self.main_menu_active = False
+                        self.game_started = True
                         self.begin_text = ' '
                     if event.key == pygame.K_ESCAPE:
-                        self.main_menu = True
+                        self.main_menu_active = True
             
-            if self.start == True:
+            if self.game_started == True:
                 self.defineKeyBindings()
                 # Check if one of the players has won
-                if self.scores[0] == 1:
+                if self.scores[0] == 10:
                     self.endGame(self.scores[0], "Player 1")
-                if self.scores[1] == 1:
+                if self.scores[1] == 10:
                     self.endGame(self.scores[1], "Player 2")
                 
                 self.checkCollisions(ballRect, pad1Rect)
@@ -152,7 +130,7 @@ class Game():
                 self.ball.setX(self.ball.getX() + self.velocity[0])
                 self.ball.setY(self.ball.getY() + self.velocity[1])
                 
-            elif self.main_menu:
+            elif self.main_menu_active:
                 self.setMainMenu()
             self.CLOCK.tick(60)
             pygame.display.update()
